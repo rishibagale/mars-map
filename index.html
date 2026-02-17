@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars 3D Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="logo">MARS EXPLORER</div>
+            <div class="top-controls">
+                <button id="runSimulation" class="btn-primary">Run Simulation</button>
+                <div class="status-indicator">
+                    <span class="status-label">STATUS:</span>
+                    <span class="status-value" id="statusValue">ACTIVE</span>
+                </div>
+                <div class="timestamp" id="lastUpdated">Last updated: --:--:--</div>
+            </div>
+        </div>
+
+        <!-- Left Panel - Mars Regions -->
+        <div class="left-panel">
+            <div class="panel-header">
+                <h2>Mars Regions</h2>
+            </div>
+            <div class="search-section">
+                <input type="text" id="regionSearch" placeholder="Search region..." class="search-input">
+                <button id="loadRegion" class="btn-load">LOAD</button>
+            </div>
+            <div class="details-section">
+                <h3>REGION DETAILS</h3>
+                <div id="regionDetails" class="details-content">
+                    <p class="placeholder">Select a region on Mars</p>
+                </div>
+            </div>
+            <div class="regions-list">
+                <h3>REGIONS</h3>
+                <div id="regionsList" class="regions-container"></div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Satellites -->
+        <div class="right-panel">
+            <div class="panel-header">
+                <h2>Mars Satellites</h2>
+            </div>
+            <div class="search-section">
+                <input type="text" id="satelliteSearch" placeholder="Search satellite..." class="search-input">
+                <button id="loadSatellite" class="btn-load">LOAD</button>
+            </div>
+            <div class="details-section">
+                <h3>LIVE SATELLITE DETAILS</h3>
+                <div id="satelliteDetails" class="details-content">
+                    <p class="placeholder">Select a satellite</p>
+                </div>
+            </div>
+            <div class="conjunction-section">
+                <h3>ORBITAL OBJECTS</h3>
+                <div id="satellitesList" class="satellites-container"></div>
+            </div>
+        </div>
+
+        <!-- 3D Canvas Container -->
+        <div id="canvas-container"></div>
+
+        <!-- Info Overlay -->
+        <div class="info-overlay">
+            <div class="info-text">
+                <span id="hoverInfo">Hover over regions or satellites for details</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="orbitControls.js"></script>
+    <script src="marsData.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
