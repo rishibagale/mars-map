@@ -2,121 +2,27 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Mars 3D</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>Real-Time 3D Mars Map</title>
+    <!-- Include CesiumJS from the official CDN -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link href="styles.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="app">
-        <!-- 3D Canvas Container -->
-        <div id="canvas-container"></div>
+    <!-- The container for the Cesium Viewer -->
+    <div id="cesiumContainer"></div>
 
-        <!-- UI Overlay Layer -->
-        <div class="ui-layer">
-
-            <!-- Top Left: Search & Menu -->
-            <div class="search-container">
-                <button class="icon-btn" id="menuBtn">
-                    <span class="material-icons">menu</span>
-                </button>
-                <div class="search-box">
-                    <span class="material-icons search-icon">search</span>
-                    <input type="text" id="mainSearch" placeholder="Search Google Mars">
-                    <button class="icon-btn small" id="searchAction">
-                        <span class="material-icons">arrow_forward</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Left Sidebar (Voyager / Layers) -->
-            <div class="sidebar" id="mainSidebar">
-                <div class="sidebar-header">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_Earth_icon.svg" alt="Logo"
-                        class="sidebar-logo">
-                    <h2>Google Mars</h2>
-                </div>
-                <div class="sidebar-content">
-                    <div class="sidebar-section">
-                        <h3><span class="material-icons">public</span> Mars Regions</h3>
-                        <div id="regionsList" class="nav-list"></div>
-                    </div>
-                    <div class="sidebar-section">
-                        <h3><span class="material-icons">satellite</span> Satellites</h3>
-                        <div id="satellitesList" class="nav-list"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Controls -->
-            <div class="controls-container">
-                <button class="control-btn" id="zoomIn" title="Zoom In">
-                    <span class="material-icons">add</span>
-                </button>
-                <button class="control-btn" id="zoomOut" title="Zoom Out">
-                    <span class="material-icons">remove</span>
-                </button>
-                <button class="control-btn" id="toggleRotation" title="Toggle Rotation">
-                    <span class="material-icons">3d_rotation</span>
-                </button>
-                <div class="speed-control" title="Simulation Speed">
-                    <span class="material-icons" style="font-size:16px; color:#ccc;">speed</span>
-                    <input type="range" id="timeSpeed" min="0" max="5" step="0.1" value="1">
-                </div>
-                <div class="compass" id="compass">
-                    <span class="material-icons" style="transform: rotate(45deg);">explore</span>
-                </div>
-            </div>
-
-            <!-- Bottom: Status / Info -->
-            <div class="bottom-bar">
-                <div class="attribution">
-                    <span>Target: <b id="targetName">Mars</b></span>
-                    <span class="divider">|</span>
-                    <span>Alt: <span id="cameraAlt">--</span> km</span>
-                    <span class="divider">|</span>
-                    <span id="statusValue" class="status-active">LIVE DATA</span>
-                </div>
-                <div class="loading-bar" id="loadingBar"></div>
-            </div>
-
-            <!-- Info Card (Pop-up style) -->
-            <div class="info-card" id="infoCard">
-                <div class="card-header">
-                    <h2 id="cardTitle">Olympus Mons</h2>
-                    <button class="close-card" id="closeCard">
-                        <span class="material-icons">close</span>
-                    </button>
-                </div>
-                <div class="card-image" id="cardImage">
-                    <!-- Placeholder for location image -->
-                    <div class="img-placeholder">
-                        <span class="material-icons">landscape</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p id="cardDesc">Description goes here...</p>
-                    <div class="card-stats" id="cardStats">
-                        <!-- Stats injected via JS -->
-                    </div>
-                </div>
-                <div class="card-actions">
-                    <button class="action-btn" id="flyToBtn">
-                        <span class="material-icons">flight_takeoff</span> Fly Here
-                    </button>
-                </div>
-            </div>
-
-            <!-- Markers Container (2D overlays) -->
-            <div id="labels-container"></div>
-        </div>
+    <!-- UI Panel for Coordinates -->
+    <div id="uiPanel">
+        <h3>Mars Coordinates</h3>
+        <div id="coords">Lat: 0.00, Lon: 0.00, Alt: 0km</div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="marsData.js"></script>
+    <!-- Main Application Script -->
     <script src="app.js"></script>
 </body>
 
