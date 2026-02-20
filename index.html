@@ -1,82 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mars 3D Explorer</title>
+    <title>Google Mars 3D</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div id="app">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="logo">MARS EXPLORER</div>
-            <div class="top-controls">
-                <button id="runSimulation" class="btn-primary">Run Simulation</button>
-                <div class="status-indicator">
-                    <span class="status-label">STATUS:</span>
-                    <span class="status-value" id="statusValue">ACTIVE</span>
-                </div>
-                <div class="timestamp" id="lastUpdated">Last updated: --:--:--</div>
-            </div>
-        </div>
-
-        <!-- Left Panel - Mars Regions -->
-        <div class="left-panel">
-            <div class="panel-header">
-                <h2>Mars Regions</h2>
-            </div>
-            <div class="search-section">
-                <input type="text" id="regionSearch" placeholder="Search region..." class="search-input">
-                <button id="loadRegion" class="btn-load">LOAD</button>
-            </div>
-            <div class="details-section">
-                <h3>REGION DETAILS</h3>
-                <div id="regionDetails" class="details-content">
-                    <p class="placeholder">Select a region on Mars</p>
-                </div>
-            </div>
-            <div class="regions-list">
-                <h3>REGIONS</h3>
-                <div id="regionsList" class="regions-container"></div>
-            </div>
-        </div>
-
-        <!-- Right Panel - Satellites -->
-        <div class="right-panel">
-            <div class="panel-header">
-                <h2>Mars Satellites</h2>
-            </div>
-            <div class="search-section">
-                <input type="text" id="satelliteSearch" placeholder="Search satellite..." class="search-input">
-                <button id="loadSatellite" class="btn-load">LOAD</button>
-            </div>
-            <div class="details-section">
-                <h3>LIVE SATELLITE DETAILS</h3>
-                <div id="satelliteDetails" class="details-content">
-                    <p class="placeholder">Select a satellite</p>
-                </div>
-            </div>
-            <div class="conjunction-section">
-                <h3>ORBITAL OBJECTS</h3>
-                <div id="satellitesList" class="satellites-container"></div>
-            </div>
-        </div>
-
         <!-- 3D Canvas Container -->
         <div id="canvas-container"></div>
 
-        <!-- Info Overlay -->
-        <div class="info-overlay">
-            <div class="info-text">
-                <span id="hoverInfo">Hover over regions or satellites for details</span>
+        <!-- UI Overlay Layer -->
+        <div class="ui-layer">
+
+            <!-- Top Left: Search & Menu -->
+            <div class="search-container">
+                <button class="icon-btn" id="menuBtn">
+                    <span class="material-icons">menu</span>
+                </button>
+                <div class="search-box">
+                    <span class="material-icons search-icon">search</span>
+                    <input type="text" id="mainSearch" placeholder="Search Google Mars">
+                    <button class="icon-btn small" id="searchAction">
+                        <span class="material-icons">arrow_forward</span>
+                    </button>
+                </div>
             </div>
+
+            <!-- Left Sidebar (Voyager / Layers) -->
+            <div class="sidebar" id="mainSidebar">
+                <div class="sidebar-header">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_Earth_icon.svg" alt="Logo"
+                        class="sidebar-logo">
+                    <h2>Google Mars</h2>
+                </div>
+                <div class="sidebar-content">
+                    <div class="sidebar-section">
+                        <h3><span class="material-icons">public</span> Mars Regions</h3>
+                        <div id="regionsList" class="nav-list"></div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3><span class="material-icons">satellite</span> Satellites</h3>
+                        <div id="satellitesList" class="nav-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Controls -->
+            <div class="controls-container">
+                <button class="control-btn" id="zoomIn" title="Zoom In">
+                    <span class="material-icons">add</span>
+                </button>
+                <button class="control-btn" id="zoomOut" title="Zoom Out">
+                    <span class="material-icons">remove</span>
+                </button>
+                <button class="control-btn" id="toggleRotation" title="Toggle Rotation">
+                    <span class="material-icons">3d_rotation</span>
+                </button>
+                <div class="speed-control" title="Simulation Speed">
+                    <span class="material-icons" style="font-size:16px; color:#ccc;">speed</span>
+                    <input type="range" id="timeSpeed" min="0" max="5" step="0.1" value="1">
+                </div>
+                <div class="compass" id="compass">
+                    <span class="material-icons" style="transform: rotate(45deg);">explore</span>
+                </div>
+            </div>
+
+            <!-- Bottom: Status / Info -->
+            <div class="bottom-bar">
+                <div class="attribution">
+                    <span>Target: <b id="targetName">Mars</b></span>
+                    <span class="divider">|</span>
+                    <span>Alt: <span id="cameraAlt">--</span> km</span>
+                    <span class="divider">|</span>
+                    <span id="statusValue" class="status-active">LIVE DATA</span>
+                </div>
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+
+            <!-- Info Card (Pop-up style) -->
+            <div class="info-card" id="infoCard">
+                <div class="card-header">
+                    <h2 id="cardTitle">Olympus Mons</h2>
+                    <button class="close-card" id="closeCard">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
+                <div class="card-image" id="cardImage">
+                    <!-- Placeholder for location image -->
+                    <div class="img-placeholder">
+                        <span class="material-icons">landscape</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p id="cardDesc">Description goes here...</p>
+                    <div class="card-stats" id="cardStats">
+                        <!-- Stats injected via JS -->
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn" id="flyToBtn">
+                        <span class="material-icons">flight_takeoff</span> Fly Here
+                    </button>
+                </div>
+            </div>
+
+            <!-- Markers Container (2D overlays) -->
+            <div id="labels-container"></div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="orbitControls.js"></script>
     <script src="marsData.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
